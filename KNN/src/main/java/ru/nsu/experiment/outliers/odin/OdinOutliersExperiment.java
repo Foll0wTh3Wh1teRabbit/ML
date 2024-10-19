@@ -22,7 +22,7 @@ public class OdinOutliersExperiment extends OutliersExperiment {
     }
 
     @Override
-    public void launchExperiment(DistanceFunction distanceFunction) {
+    public Set<Integer> launchExperiment(DistanceFunction distanceFunction) {
         List<Integer> verticesDegrees = getVerticesDegrees(distanceFunction);
 
         Set<Integer> outliersCandidates = new HashSet<>();
@@ -39,6 +39,8 @@ public class OdinOutliersExperiment extends OutliersExperiment {
             inDegreeNumber,
             outliersCandidates
         );
+
+        return outliersCandidates;
     }
 
     /**

@@ -9,17 +9,18 @@ import java.util.PriorityQueue;
 
 public class RecognitionExperiment {
 
-    protected static final Integer K_NEAREST_NUMBER = 7;
-
     protected static final Integer TRAIN_SET_PERCENTAGE = 99;
 
     protected final Matrix[] trainSet;
 
     protected final Matrix[] testSet;
 
-    protected RecognitionExperiment(Matrix[] trainSet, Matrix[] testSet) {
+    protected final Integer kNearestNumber;
+
+    protected RecognitionExperiment(Matrix[] trainSet, Matrix[] testSet, Integer kNearestNumber) {
         this.trainSet = trainSet;
         this.testSet = testSet;
+        this.kNearestNumber = kNearestNumber;
     }
 
     public void launchExperiment(
@@ -48,6 +49,7 @@ public class RecognitionExperiment {
 
         System.out.println("Experiment completed!");
 
+        System.out.println("K-Nearest number: " + kNearestNumber);
         System.out.println("Distance function: " + distanceFunction.getClass().getSimpleName());
         System.out.println("Noise function: " + noiseFunction.getClass().getSimpleName());
         System.out.println("Noise percentage: " + noiseFunction.noisePercentage);
@@ -58,7 +60,7 @@ public class RecognitionExperiment {
 
     private Integer getPredictedClass(PriorityQueue<Matrix> priorityQueue) {
         int[] classCounter = new int[10];
-        for (int i = 0; i < K_NEAREST_NUMBER; ++i) {
+        for (int i = 0; i < kNearestNumber; ++i) {
             classCounter[priorityQueue.poll().label]++;
         }
 
@@ -95,9 +97,9 @@ public class RecognitionExperiment {
 
     private void printClassesMetrics(int[][] confusionMatrix) {
         int totalExamples = 0;
-        for (int i = 0; i < confusionMatrix.length; i++) {
-            for (int j = 0; j < confusionMatrix[i].length; j++) {
-                totalExamples += confusionMatrix[i][j];
+        for (int[] matrix : confusionMatrix) {
+            for (int i : matrix) {
+                totalExamples += i;
             }
         }
 
@@ -145,6 +147,8 @@ public class RecognitionExperiment {
 
             System.out.println((double) confusionMatrix[i][i] / (predictedAsCurrent + confusionMatrix[i][i]));
         }
+
+        System.out.println();
     }
 
 }

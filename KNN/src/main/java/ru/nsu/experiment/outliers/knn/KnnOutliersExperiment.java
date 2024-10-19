@@ -16,7 +16,7 @@ public class KnnOutliersExperiment extends OutliersExperiment {
     }
 
     @Override
-    public void launchExperiment(DistanceFunction distanceFunction) {
+    public Set<Integer> launchExperiment(DistanceFunction distanceFunction) {
         Set<Integer> outliersCandidates = detectOutliers(distanceFunction);
 
         printResults(
@@ -26,6 +26,8 @@ public class KnnOutliersExperiment extends OutliersExperiment {
             null,
             outliersCandidates
         );
+
+        return outliersCandidates;
     }
 
     public Set<Integer> detectOutliers(DistanceFunction distanceFunction) {

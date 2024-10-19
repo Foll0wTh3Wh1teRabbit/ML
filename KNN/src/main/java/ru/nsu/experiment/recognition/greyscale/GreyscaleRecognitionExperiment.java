@@ -24,8 +24,8 @@ public class GreyscaleRecognitionExperiment extends RecognitionExperiment {
         }
     }
 
-    public GreyscaleRecognitionExperiment() {
-        super(trainTestSplit.first(), trainTestSplit.second());
+    public GreyscaleRecognitionExperiment(Integer kNearestNumber) {
+        super(trainTestSplit.first(), trainTestSplit.second(), kNearestNumber);
     }
 
 }

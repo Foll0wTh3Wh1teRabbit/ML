@@ -19,12 +19,10 @@ public class OdinOutliersExperimentTest {
             Arguments.of(new OdinOutliersExperiment(3, 3), new EuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(3, 3), new SquaredEuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(3, 3), new ChebyshevDistanceFunction()),
-
             Arguments.of(new OdinOutliersExperiment(3, 5), new AbsoluteDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(3, 5), new EuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(3, 5), new SquaredEuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(3, 5), new ChebyshevDistanceFunction()),
-
             Arguments.of(new OdinOutliersExperiment(3, 7), new AbsoluteDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(3, 7), new EuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(3, 7), new SquaredEuclideanDistanceFunction()),
@@ -35,12 +33,10 @@ public class OdinOutliersExperimentTest {
             Arguments.of(new OdinOutliersExperiment(5, 3), new EuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(5, 3), new SquaredEuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(5, 3), new ChebyshevDistanceFunction()),
-
             Arguments.of(new OdinOutliersExperiment(5, 5), new AbsoluteDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(5, 5), new EuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(5, 5), new SquaredEuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(5, 5), new ChebyshevDistanceFunction()),
-
             Arguments.of(new OdinOutliersExperiment(5, 7), new AbsoluteDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(5, 7), new EuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(5, 7), new SquaredEuclideanDistanceFunction()),
@@ -51,12 +47,10 @@ public class OdinOutliersExperimentTest {
             Arguments.of(new OdinOutliersExperiment(7, 3), new EuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(7, 3), new SquaredEuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(7, 3), new ChebyshevDistanceFunction()),
-
             Arguments.of(new OdinOutliersExperiment(7, 5), new AbsoluteDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(7, 5), new EuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(7, 5), new SquaredEuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(7, 5), new ChebyshevDistanceFunction()),
-
             Arguments.of(new OdinOutliersExperiment(7, 7), new AbsoluteDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(7, 7), new EuclideanDistanceFunction()),
             Arguments.of(new OdinOutliersExperiment(7, 7), new SquaredEuclideanDistanceFunction()),

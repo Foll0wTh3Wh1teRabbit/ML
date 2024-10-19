@@ -78,7 +78,7 @@ public abstract class OutliersExperiment {
 
     protected final Matrix[] matrices;
 
-    protected final Set<Integer> indicesOfOutliers;
+    public final Set<Integer> indicesOfOutliers;
 
     protected OutliersExperiment(Integer kNearestNumber, Matrix[] matrices, Set<Integer> indicesOfOutliers) {
         this.kNearestNumber = kNearestNumber;
@@ -86,7 +86,7 @@ public abstract class OutliersExperiment {
         this.indicesOfOutliers = indicesOfOutliers;
     }
 
-    public abstract void launchExperiment(DistanceFunction distanceFunction);
+    public abstract Set<Integer> launchExperiment(DistanceFunction distanceFunction);
 
     protected void printResults(
         String algorithm,
@@ -140,6 +140,8 @@ public abstract class OutliersExperiment {
         System.out.println("Accuracy: " + accuracy);
         System.out.println("Precision: " + precision);
         System.out.println("Recall: " + recall);
+
+        System.out.println();
     }
 
 }

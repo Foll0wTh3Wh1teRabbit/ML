@@ -24,8 +24,8 @@ public class BlackWhiteRecognitionExperiment extends RecognitionExperiment {
         }
     }
 
-    public BlackWhiteRecognitionExperiment() {
-        super(trainTestSplit.first(), trainTestSplit.second());
+    public BlackWhiteRecognitionExperiment(Integer kNearestNumber) {
+        super(trainTestSplit.first(), trainTestSplit.second(), kNearestNumber);
     }
 
 }

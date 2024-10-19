@@ -20,44 +20,35 @@ public class GreyscaleRecognitionExperimentTest {
     private static Stream<Arguments> greyscaleRecognitionWithDifferentMetricsAndNoiseParameters() {
         return Stream.of(
             Arguments.of(new AbsoluteDistanceFunction(), new GreyscaleIdentityFunction()),
-
             Arguments.of(new AbsoluteDistanceFunction(), new GreyscaleUniformNoiseFunction(30)),
             Arguments.of(new AbsoluteDistanceFunction(), new GreyscaleUniformNoiseFunction(45)),
             Arguments.of(new AbsoluteDistanceFunction(), new GreyscaleUniformNoiseFunction(60)),
-
             Arguments.of(new AbsoluteDistanceFunction(), new GreyscaleUnevenNoiseFunction(30)),
             Arguments.of(new AbsoluteDistanceFunction(), new GreyscaleUnevenNoiseFunction(45)),
             Arguments.of(new AbsoluteDistanceFunction(), new GreyscaleUnevenNoiseFunction(60)),
 
-
             Arguments.of(new EuclideanDistanceFunction(), new GreyscaleIdentityFunction()),
-
             Arguments.of(new EuclideanDistanceFunction(), new GreyscaleUniformNoiseFunction(30)),
             Arguments.of(new EuclideanDistanceFunction(), new GreyscaleUniformNoiseFunction(45)),
             Arguments.of(new EuclideanDistanceFunction(), new GreyscaleUniformNoiseFunction(60)),
-
             Arguments.of(new EuclideanDistanceFunction(), new GreyscaleUnevenNoiseFunction(30)),
             Arguments.of(new EuclideanDistanceFunction(), new GreyscaleUnevenNoiseFunction(45)),
             Arguments.of(new EuclideanDistanceFunction(), new GreyscaleUnevenNoiseFunction(60)),
 
 
             Arguments.of(new SquaredEuclideanDistanceFunction(), new GreyscaleIdentityFunction()),
-
             Arguments.of(new SquaredEuclideanDistanceFunction(), new GreyscaleUniformNoiseFunction(30)),
             Arguments.of(new SquaredEuclideanDistanceFunction(), new GreyscaleUniformNoiseFunction(45)),
             Arguments.of(new SquaredEuclideanDistanceFunction(), new GreyscaleUniformNoiseFunction(60)),
-
             Arguments.of(new SquaredEuclideanDistanceFunction(), new GreyscaleUnevenNoiseFunction(30)),
             Arguments.of(new SquaredEuclideanDistanceFunction(), new GreyscaleUnevenNoiseFunction(45)),
             Arguments.of(new SquaredEuclideanDistanceFunction(), new GreyscaleUnevenNoiseFunction(60)),
 
 
             Arguments.of(new ChebyshevDistanceFunction(), new GreyscaleIdentityFunction()),
-
             Arguments.of(new ChebyshevDistanceFunction(), new GreyscaleUniformNoiseFunction(30)),
             Arguments.of(new ChebyshevDistanceFunction(), new GreyscaleUniformNoiseFunction(45)),
             Arguments.of(new ChebyshevDistanceFunction(), new GreyscaleUniformNoiseFunction(60)),
-
             Arguments.of(new ChebyshevDistanceFunction(), new GreyscaleUnevenNoiseFunction(30)),
             Arguments.of(new ChebyshevDistanceFunction(), new GreyscaleUnevenNoiseFunction(45)),
             Arguments.of(new ChebyshevDistanceFunction(), new GreyscaleUnevenNoiseFunction(60))
@@ -70,7 +61,15 @@ public class GreyscaleRecognitionExperimentTest {
         DistanceFunction distanceFunction,
         GreyscaleNoiseFunction noiseFunction
     ) {
-        new GreyscaleRecognitionExperiment().launchExperiment(distanceFunction, noiseFunction);
+        for (int i = 3; i <= 9; i = i + 2) {
+            System.out.println("Starting Greyscale Recognition for K = " + i);
+
+            new GreyscaleRecognitionExperiment(i).launchExperiment(distanceFunction, noiseFunction);
+        }
+
+        System.out.println("Starting Greyscale Recognition for K = " + 101);
+
+        new GreyscaleRecognitionExperiment(101).launchExperiment(distanceFunction, noiseFunction);
     }
 
 }
