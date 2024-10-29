@@ -24,19 +24,23 @@ import ru.nsu.util.function.error.UniformDistributionEvaluationError;
 import ru.nsu.util.tuple.Pair;
 import ru.nsu.util.selection.SelectionGenerator;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public class PolynomialRegressionTest {
 
-    private static final Integer NUM_ITERATIONS = 10000;
+    private static final Integer NUM_ITERATIONS = 400000;
 
     private static final Integer NUM_SAMPLES = 150;
 
     private static final Integer POLYNOMIAL_DEGREE = 4;
 
-    private static final Double LEARNING_RATE = 0.0000001;
+    private static final Double LEARNING_RATE = 0.00001;
 
     private static final Double REGULARIZATION_RATE = 1.0;
 
@@ -385,7 +389,10 @@ public class PolynomialRegressionTest {
         ApproximatingFunction function,
         LossFunction lossFunction,
         GradientStepFunction stepFunction
-    ) {
+    ) throws IOException {
+        File file = new File("polynomialRegressionTest.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
         System.out.println("Polynomial Degree: " + POLYNOMIAL_DEGREE);
         System.out.println("Learning Rate: " + LEARNING_RATE);
         System.out.println("Loss Function: " + lossFunction.getClass().getSimpleName());
@@ -397,7 +404,7 @@ public class PolynomialRegressionTest {
         System.out.println("Regularization Rate: " + REGULARIZATION_RATE);
         System.out.println("Coefficients:");
 
-        RegressionExperiment experiment = new PolynomialRegressionExperiment(POLYNOMIAL_DEGREE, lossFunction, stepFunction);
+        RegressionExperiment experiment = new PolynomialRegressionExperiment(POLYNOMIAL_DEGREE, lossFunction, stepFunction, writer);
         List<Pair<Double, Double>> samples = SelectionGenerator.generateSamples(function, NUM_SAMPLES);
 
         experiment.launchTrain(samples.subList(0, NUM_SAMPLES - 10), NUM_ITERATIONS);

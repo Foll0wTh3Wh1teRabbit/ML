@@ -4,6 +4,7 @@ import ru.nsu.experiment.gradient.GradientStepFunction;
 import ru.nsu.experiment.loss.LossFunction;
 import ru.nsu.util.tuple.Pair;
 
+import java.io.IOException;
 import java.util.List;
 
 public abstract class RegressionExperiment {
@@ -17,8 +18,8 @@ public abstract class RegressionExperiment {
         this.stepFunction = stepFunction;
     }
 
-    public abstract void launchTrain(List<Pair<Double, Double>> samples, int numIterations);
+    public abstract void launchTrain(List<Pair<Double, Double>> samples, int numIterations) throws IOException;
 
-    public abstract double launchTest(List<Pair<Double, Double>> samples);
+    public abstract double launchTest(List<Pair<Double, Double>> samples) throws IOException;
 
 }
