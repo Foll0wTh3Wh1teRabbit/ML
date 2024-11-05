@@ -2,4 +2,5 @@ rootProject.name = 'ML'
 
 include ':KNN'
 include ':Regression'
-include ':NN'
+include 'PerceptronClassifier'
+include 'PerceptronRegressor'

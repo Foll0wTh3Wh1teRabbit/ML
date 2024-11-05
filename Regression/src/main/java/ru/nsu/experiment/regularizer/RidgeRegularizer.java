@@ -17,9 +17,4 @@ public class RidgeRegularizer extends Regularizer {
         return (lambda / 2) * squaredCoefficientsSum;
     }
 
-    @Override
-    public double evaluateGradientRegularizationTerm(double coefficient) {
-        return 2 * lambda * coefficient;
-    }
-
 }

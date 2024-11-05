@@ -10,6 +10,4 @@ public abstract class Regularizer {
 
     public abstract double evaluateLossRegularizationTerm(double[] coefficients);
 
-    public abstract double evaluateGradientRegularizationTerm(double coefficient);
-
 }

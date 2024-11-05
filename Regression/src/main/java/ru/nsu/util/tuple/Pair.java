@@ -6,4 +6,5 @@ public record Pair<F, S>(F first, S second) {
     public String toString() {
         return "(" + first + ", " + second + ")";
     }
+
 }

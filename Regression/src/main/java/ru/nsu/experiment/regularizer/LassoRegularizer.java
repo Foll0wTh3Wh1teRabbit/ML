@@ -20,9 +20,4 @@ public class LassoRegularizer extends Regularizer {
         return (lambda / 2) * coefficientSum;
     }
 
-    @Override
-    public double evaluateGradientRegularizationTerm(double coefficient) {
-        return lambda * signum(coefficient);
-    }
-
 }
