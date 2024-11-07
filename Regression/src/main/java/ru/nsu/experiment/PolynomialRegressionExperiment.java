@@ -1,95 +1,89 @@
 package ru.nsu.experiment;
 
-import org.apache.commons.math.linear.DecompositionSolver;
-import org.apache.commons.math.linear.LUDecomposition;
+import org.apache.commons.math.linear.Array2DRowRealMatrix;
+import org.apache.commons.math.linear.ArrayRealVector;
 import org.apache.commons.math.linear.LUDecompositionImpl;
-import org.apache.commons.math.linear.MatrixUtils;
 import org.apache.commons.math.linear.RealMatrix;
 import org.apache.commons.math.linear.RealVector;
-import org.apache.commons.math.linear.SingularMatrixException;
-import org.apache.commons.math.linear.SingularValueDecomposition;
-import org.apache.commons.math.linear.SingularValueDecompositionImpl;
 import ru.nsu.experiment.loss.LossFunction;
 import ru.nsu.experiment.regularizer.Regularizer;
-import ru.nsu.util.function.ApproximatingFunction;
-import ru.nsu.util.selection.SelectionGenerator;
-import ru.nsu.util.tuple.Pair;
+import ru.nsu.util.selection.Sample;
 
 import java.util.List;
-import java.util.Locale;
+import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.lang.Math.pow;
+
 public class PolynomialRegressionExperiment {
 
-    private static final int POLYNOMIAL_DEGREE = 5; // Установите нужную степень полинома
-    private static final double LAMBDA = 0; // Коэффициент регуляризации
+    private static final BiFunction<Double, Integer, List<Double>> featureToPolynomialFeatures =
+        (feature, degree) -> IntStream.range(0, degree + 1).boxed()
+            .mapToDouble(it -> pow(feature, it)).boxed()
+            .collect(Collectors.toList());
 
-    public Double launchExperiment(
-        int numSamples,
-        ApproximatingFunction approximatingFunction,
-        LossFunction lossFunction,
-        Regularizer regularizer
-    ) {
-        // Генерация выборок в виде пары <feature, label>
-        List<Pair<Double, Double>> samples = SelectionGenerator.generateSamples(approximatingFunction, numSamples);
+    public void launchRegression(int polynomialDegree,
+                                 List<Sample> samples,
+                                 Regularizer regularizer) {
 
-        samples.forEach(it -> System.out.println(it + ","));
+        System.out.println("Received samples: " + samples);
 
-        // Создание матрицы Вандермонда
-        double[][] featuresVandermondMatrix = samples.stream()
-            .map(Pair::first)
-            .map(feature -> IntStream.range(0, POLYNOMIAL_DEGREE + 1)
-                .mapToDouble(degree -> Math.pow(feature, degree))
-                .toArray())
-            .toArray(double[][]::new);
+        double[] weights = solveMinimizationSystem(polynomialDegree, samples, regularizer);
 
-        // Создание вектора меток (labels)
-        double[] labelsVector = samples.stream()
-            .map(Pair::second)
-            .mapToDouble(Double::doubleValue)
-            .toArray();
+        System.out.println("Regression model:");
+        for (int i = 0; i < weights.length; i++) {
+            System.out.print(weights[i] + " * x ** " + i);
 
-        // Создание матриц и векторов для дальнейших вычислений
-        RealMatrix x = MatrixUtils.createRealMatrix(featuresVandermondMatrix);
-        RealVector y = MatrixUtils.createRealVector(labelsVector);
-
-        // Вычисление X^T * X и X^T * y
-        RealMatrix xT = x.transpose();
-        RealMatrix xTx = xT.multiply(x);
-        RealVector xTy = xT.operate(y);
-
-        // Добавление L2-регуляризации (если LAMBDA > 0)
-        RealMatrix lambdaI = MatrixUtils.createRealIdentityMatrix(xTx.getRowDimension()).scalarMultiply(LAMBDA);
-        RealMatrix xTxReg = xTx.add(lambdaI);
-
-        // Проверка сингулярности и обращение матрицы
-        RealMatrix inversedPart;
-        try {
-            DecompositionSolver solver = new SingularValueDecompositionImpl(xTxReg).getSolver();
-            if (!solver.isNonSingular()) {
-                throw new SingularMatrixException(); // Прерываем, если матрица вырождена
-            }
-            inversedPart = solver.getInverse();
-        } catch (SingularMatrixException e) {
-            System.err.println("Матрица вырождена, невозможно вычислить обратную.");
-            return null;
-        }
-
-        // Решение для коэффициентов (весов)
-        RealVector result = inversedPart.operate(xTy);
-
-        // Печать полинома
-        System.out.print("Полином: ");
-        for (int i = 0; i < result.getDimension(); i++) {
-            System.out.printf(Locale.US, "%f * x ** %d", result.getEntry(i), i);
-            if (i < result.getDimension() - 1) {
+            if (i < weights.length - 1) {
                 System.out.print(" + ");
             }
         }
-        System.out.println();
-
-        // Возврат значения ошибки (например, метрика ошибки MSE может быть рассчитана с использованием lossFunction)
-        return null; // Возвращайте значение ошибки, если нужно
     }
+
+    public void launchRegressionWithTest(int polynomialDegree,
+                                         List<Sample> trainSamples,
+                                         List<Sample> testSamples,
+                                         LossFunction lossFunction,
+                                         Regularizer regularizer) {
+
+        double[] weights = solveMinimizationSystem(polynomialDegree, trainSamples, regularizer);
+
+        double loss = lossFunction.calculateLoss(weights, testSamples);
+        System.out.println("Test completed. Loss: " + loss);
+    }
+
+    private double[] solveMinimizationSystem(int degree, List<Sample> samples, Regularizer regularizer) {
+        double[][] polynomialFeatures = samples.stream()
+            .map(Sample::x)
+            .map(
+                feature -> featureToPolynomialFeatures.apply(feature, degree)
+                    .stream()
+                    .mapToDouble(Double::doubleValue)
+                    .toArray()
+            )
+            .toArray(double[][]::new);
+
+        double[] labels = samples.stream()
+            .map(Sample::y)
+            .mapToDouble(Double::doubleValue)
+            .toArray();
+
+        RealMatrix x = new Array2DRowRealMatrix(polynomialFeatures);
+        RealMatrix xT = x.transpose();
+        RealVector y = new ArrayRealVector(labels);
+
+        RealMatrix xTx = xT.multiply(x);
+        RealVector xTy = xT.operate(y);
+
+        RealMatrix xTxWithRegularization = Optional.ofNullable(regularizer)
+            .map(reg -> reg.evaluateMatrixWithRegularization(xTx))
+            .orElse(xTx);
+
+        RealMatrix xTxInversed = new LUDecompositionImpl(xTxWithRegularization).getSolver().getInverse();
+
+        return xTxInversed.operate(xTy).getData();
+    }
+
 }

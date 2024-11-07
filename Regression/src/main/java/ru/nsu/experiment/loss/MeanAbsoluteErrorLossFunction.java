@@ -12,7 +12,7 @@ public class MeanAbsoluteErrorLossFunction extends LossFunction {
 
     @Override
     protected double getDistance(double predicted, double actual) {
-        return abs(actual - predicted);
+        return abs(predicted - actual);
     }
 
 }

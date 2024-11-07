@@ -12,7 +12,7 @@ public class MeanSquaredErrorLossFunction extends LossFunction {
 
     @Override
     protected double getDistance(double predicted, double actual) {
-        return pow(actual - predicted, 2);
+        return pow(predicted - actual, 2);
     }
 
 }

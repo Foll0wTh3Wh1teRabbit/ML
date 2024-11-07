@@ -1,5 +1,7 @@
 package ru.nsu.experiment.regularizer;
 
+import org.apache.commons.math.linear.RealMatrix;
+
 public abstract class Regularizer {
 
     protected final double lambda;
@@ -8,6 +10,8 @@ public abstract class Regularizer {
         this.lambda = lambda;
     }
 
-    public abstract double evaluateLossRegularizationTerm(double[] coefficients);
+    public abstract double evaluateLossWithRegularization(double[] regressionModel);
+
+    public abstract RealMatrix evaluateMatrixWithRegularization(RealMatrix xTx);
 
 }

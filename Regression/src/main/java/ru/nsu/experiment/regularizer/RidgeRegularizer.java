@@ -1,5 +1,8 @@
 package ru.nsu.experiment.regularizer;
 
+import org.apache.commons.math.linear.MatrixUtils;
+import org.apache.commons.math.linear.RealMatrix;
+
 public class RidgeRegularizer extends Regularizer {
 
     public RidgeRegularizer(double lambda) {
@@ -7,14 +10,16 @@ public class RidgeRegularizer extends Regularizer {
     }
 
     @Override
-    public double evaluateLossRegularizationTerm(double[] coefficients) {
-        double squaredCoefficientsSum = 0.0;
+    public double evaluateLossWithRegularization(double[] regressionModel) {
+        return 0.0;
+    }
 
-        for (double coefficient : coefficients) {
-            squaredCoefficientsSum += (coefficient * coefficient);
-        }
+    @Override
+    public RealMatrix evaluateMatrixWithRegularization(RealMatrix xTx) {
+        RealMatrix regularizationTerm =
+            MatrixUtils.createRealIdentityMatrix(xTx.getRowDimension()).scalarMultiply(lambda);
 
-        return (lambda / 2) * squaredCoefficientsSum;
+        return xTx.subtract(regularizationTerm);
     }
 
 }

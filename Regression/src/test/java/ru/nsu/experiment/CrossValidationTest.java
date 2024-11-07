@@ -7,9 +7,10 @@ import ru.nsu.util.function.ApproximatingFunction;
 import ru.nsu.util.function.CosinusApproximatingFunction;
 import ru.nsu.util.function.LinearWithSinusApproximatingFunction;
 import ru.nsu.util.function.PolynomialApproximatingFunction;
-import ru.nsu.util.function.error.NormalDistributionEvaluationError;
-import ru.nsu.util.function.error.UniformDistributionEvaluationError;
+import ru.nsu.util.stochastic.NormalDistributedStochasticValue;
+import ru.nsu.util.stochastic.UniformDistributedStochasticValue;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.stream.Stream;
 
@@ -21,11 +22,16 @@ public class CrossValidationTest {
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
     };
 
-    private static final UniformDistributionEvaluationError uniformError =
-        new UniformDistributionEvaluationError(0.2,0.5);
+    private static final Double[] LAMBDAS = {
+        0.0000000001, 0.000000001, 0.00000001, 0.0000001, 0.000001, 0.00001,
+        0.0001, 0.001, 0.01, 0.1, 1.0
+    };
 
-    private static final NormalDistributionEvaluationError normalError =
-        new NormalDistributionEvaluationError(0.0, 0.5);
+    private static final UniformDistributedStochasticValue uniformError =
+        new UniformDistributedStochasticValue(0.2,0.5);
+
+    private static final NormalDistributedStochasticValue normalError =
+        new NormalDistributedStochasticValue(0.0, 0.5);
 
     private static Stream<Arguments> crossValidationTestParameters() {
         return Stream.of(
