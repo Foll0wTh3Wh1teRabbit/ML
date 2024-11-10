@@ -57,7 +57,7 @@ public class OverfittingRegressionTest {
     public void overfittingRegressionTest(ApproximatingFunction approximatingFunction) {
         List<Sample> samples = SelectionGenerator.generateSamples(approximatingFunction, 5);
 
-        new PolynomialRegressionExperiment().launchRegression(
+        PolynomialRegressionExperiment.launchRegression(
             15,
             samples,
             null

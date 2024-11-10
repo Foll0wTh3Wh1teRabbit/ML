@@ -1,6 +1,5 @@
 package ru.nsu.experiment.loss;
 
-import lombok.Getter;
 import ru.nsu.experiment.regularizer.Regularizer;
 import ru.nsu.util.selection.Sample;
 
@@ -9,7 +8,6 @@ import java.util.Optional;
 
 import static java.lang.Math.pow;
 
-@Getter
 public abstract class LossFunction {
 
     protected final Regularizer regularizer;
@@ -34,7 +32,7 @@ public abstract class LossFunction {
         }
 
         double regularizationTerm = Optional.ofNullable(regularizer)
-            .map(it -> it.evaluateLossWithRegularization(regressionModel))
+            .map(reg -> reg.evaluateLossRegularizationTerm(regressionModel))
             .orElse(0.0);
 
         totalLoss += regularizationTerm;

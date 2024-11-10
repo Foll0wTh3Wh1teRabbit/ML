@@ -1,8 +1,8 @@
-package ru.nsu.util.stochastic;
+package ru.nsu.util.selection.stochastic;
 
 import java.util.Random;
 
-public record NormalDistributedStochasticValue(Double bias, Double variance) implements StochasticValue {
+public record NormalDistributionStochasticValue(Double bias, Double variance) implements StochasticValue {
 
     @Override
     public Double get() {

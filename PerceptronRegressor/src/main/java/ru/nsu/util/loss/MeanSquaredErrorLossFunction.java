@@ -5,8 +5,13 @@ import static java.lang.Math.pow;
 public class MeanSquaredErrorLossFunction implements LossFunction {
 
     @Override
-    public Double apply(Double predicted, Double actual) {
+    public double calculate(double predicted, double actual) {
         return pow(predicted - actual, 2);
+    }
+
+    @Override
+    public double calculateGradient(double predicted, double actual) {
+        return 2 * (predicted - actual);
     }
 
 }

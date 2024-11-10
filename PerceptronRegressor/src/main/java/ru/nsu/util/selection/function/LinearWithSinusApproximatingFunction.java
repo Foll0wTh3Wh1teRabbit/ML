@@ -1,15 +1,13 @@
 package ru.nsu.util.selection.function;
 
-import ru.nsu.util.selection.error.EvaluationError;
-
 import static java.lang.Math.PI;
 import static java.lang.Math.sin;
 
-public class LinearWithSinusApproximatingFunction implements ApproximatingFunction {
+public class LinearWithSinusApproximatingFunction extends ApproximatingFunction {
 
     @Override
-    public Double apply(Double x, EvaluationError evaluationError) {
-        return x * sin(2.0 * PI * x) + evaluationError.get();
+    protected Double evaluate(Double x) {
+        return x * sin(2 * PI * x);
     }
 
 }

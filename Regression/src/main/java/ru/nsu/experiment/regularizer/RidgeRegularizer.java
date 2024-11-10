@@ -10,16 +10,19 @@ public class RidgeRegularizer extends Regularizer {
     }
 
     @Override
-    public double evaluateLossWithRegularization(double[] regressionModel) {
-        return 0.0;
+    public double evaluateLossRegularizationTerm(double[] regressionModel) {
+        double squaredCoefficientsSum = 0.0;
+
+        for (double coefficient : regressionModel) {
+            squaredCoefficientsSum += (coefficient * coefficient);
+        }
+
+        return lambda * squaredCoefficientsSum / 2;
     }
 
     @Override
-    public RealMatrix evaluateMatrixWithRegularization(RealMatrix xTx) {
-        RealMatrix regularizationTerm =
-            MatrixUtils.createRealIdentityMatrix(xTx.getRowDimension()).scalarMultiply(lambda);
-
-        return xTx.subtract(regularizationTerm);
+    public RealMatrix evaluateMatrixRegularizationTerm(int dimension) {
+        return MatrixUtils.createRealIdentityMatrix(dimension).scalarMultiply(lambda);
     }
 
 }

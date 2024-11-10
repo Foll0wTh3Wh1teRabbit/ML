@@ -1,5 +1,6 @@
 package ru.nsu.experiment;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.math.linear.Array2DRowRealMatrix;
 import org.apache.commons.math.linear.ArrayRealVector;
 import org.apache.commons.math.linear.LUDecompositionImpl;
@@ -17,6 +18,7 @@ import java.util.stream.IntStream;
 
 import static java.lang.Math.pow;
 
+@UtilityClass
 public class PolynomialRegressionExperiment {
 
     private static final BiFunction<Double, Integer, List<Double>> featureToPolynomialFeatures =
@@ -30,45 +32,24 @@ public class PolynomialRegressionExperiment {
 
         System.out.println("Received samples: " + samples);
 
-        double[] weights = solveMinimizationSystem(polynomialDegree, samples, regularizer);
-
-        System.out.println("Regression model:");
-        for (int i = 0; i < weights.length; i++) {
-            System.out.print(weights[i] + " * x ** " + i);
-
-            if (i < weights.length - 1) {
-                System.out.print(" + ");
-            }
-        }
+        double[] regressionModel = solveMinimizationSystem(polynomialDegree, samples, regularizer);
+        printRegressionModel(regressionModel);
     }
 
-    public void launchRegressionWithTest(int polynomialDegree,
+    public double launchRegressionWithTest(int polynomialDegree,
                                          List<Sample> trainSamples,
                                          List<Sample> testSamples,
                                          LossFunction lossFunction,
                                          Regularizer regularizer) {
 
-        double[] weights = solveMinimizationSystem(polynomialDegree, trainSamples, regularizer);
+        double[] regressionModel = solveMinimizationSystem(polynomialDegree, trainSamples, regularizer);
 
-        double loss = lossFunction.calculateLoss(weights, testSamples);
-        System.out.println("Test completed. Loss: " + loss);
+        return lossFunction.calculateLoss(regressionModel, testSamples);
     }
 
     private double[] solveMinimizationSystem(int degree, List<Sample> samples, Regularizer regularizer) {
-        double[][] polynomialFeatures = samples.stream()
-            .map(Sample::x)
-            .map(
-                feature -> featureToPolynomialFeatures.apply(feature, degree)
-                    .stream()
-                    .mapToDouble(Double::doubleValue)
-                    .toArray()
-            )
-            .toArray(double[][]::new);
-
-        double[] labels = samples.stream()
-            .map(Sample::y)
-            .mapToDouble(Double::doubleValue)
-            .toArray();
+        double[][] polynomialFeatures = getPolynomialFeatures(degree, samples);
+        double[] labels = getLabels(samples);
 
         RealMatrix x = new Array2DRowRealMatrix(polynomialFeatures);
         RealMatrix xT = x.transpose();
@@ -77,13 +58,47 @@ public class PolynomialRegressionExperiment {
         RealMatrix xTx = xT.multiply(x);
         RealVector xTy = xT.operate(y);
 
-        RealMatrix xTxWithRegularization = Optional.ofNullable(regularizer)
-            .map(reg -> reg.evaluateMatrixWithRegularization(xTx))
+        RealMatrix lambdaI = Optional.ofNullable(regularizer)
+            .map(reg -> reg.evaluateMatrixRegularizationTerm(xTx.getRowDimension()))
+            .orElse(null);
+
+        RealMatrix xTxWithLambdaI = Optional.ofNullable(lambdaI)
+            .map(xTx::subtract)
             .orElse(xTx);
 
-        RealMatrix xTxInversed = new LUDecompositionImpl(xTxWithRegularization).getSolver().getInverse();
+        RealMatrix xTxInversed = new LUDecompositionImpl(xTxWithLambdaI).getSolver().getInverse();
 
         return xTxInversed.operate(xTy).getData();
+    }
+
+    private double[][] getPolynomialFeatures(int degree, List<Sample> samples) {
+        return samples.stream()
+            .map(Sample::x)
+            .map(
+                feature -> featureToPolynomialFeatures.apply(feature, degree)
+                    .stream()
+                    .mapToDouble(Double::doubleValue)
+                    .toArray()
+            )
+            .toArray(double[][]::new);
+    }
+
+    private double[] getLabels(List<Sample> samples) {
+        return samples.stream()
+            .map(Sample::y)
+            .mapToDouble(Double::doubleValue)
+            .toArray();
+    }
+
+    private void printRegressionModel(double[] regressionModel) {
+        System.out.println("Regression model:");
+        for (int i = 0; i < regressionModel.length; i++) {
+            System.out.print(regressionModel[i] + " * x ** " + i);
+
+            if (i < regressionModel.length - 1) {
+                System.out.print(" + ");
+            }
+        }
     }
 
 }

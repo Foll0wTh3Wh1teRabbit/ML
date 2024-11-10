@@ -21,105 +21,109 @@ import java.util.stream.Stream;
 
 public class PolynomialRegressionTest {
 
+    private static final Integer POLYNOMIAL_DEGREE = 3;
+
     private static Stream<Arguments> polynomialRegressionTestParameters() {
         return Stream.of(
             Arguments.of(
                 new CosinusApproximatingFunction(
-                    new UniformDistributedStochasticValue(-0.5, 0.5)
+                    new UniformDistributedStochasticValue(0.0, 0.1)
                 ),
                 null
             ),
             Arguments.of(
                 new CosinusApproximatingFunction(
-                    new UniformDistributedStochasticValue(-0.5, 0.5)
+                    new UniformDistributedStochasticValue(0.0, 0.1)
                 ),
-                new RidgeRegularizer(0.001)
+                new RidgeRegularizer(0.0001)
             ),
 
             Arguments.of(
                 new CosinusApproximatingFunction(
-                    new NormalDistributedStochasticValue(0.0, 0.33)
+                    new NormalDistributedStochasticValue(0.0, 0.033)
                 ),
                 null
             ),
             Arguments.of(
                 new CosinusApproximatingFunction(
-                    new NormalDistributedStochasticValue(0.0, 0.33)
+                    new NormalDistributedStochasticValue(0.0, 0.033)
                 ),
-                new RidgeRegularizer(0.001)
+                new RidgeRegularizer(0.0001)
             ),
 
             Arguments.of(
                 new LinearWithSinusApproximatingFunction(
-                    new UniformDistributedStochasticValue(-0.5, 0.5)
+                    new UniformDistributedStochasticValue(0.0, 0.1)
                 ),
                 null
             ),
             Arguments.of(
                 new LinearWithSinusApproximatingFunction(
-                    new UniformDistributedStochasticValue(-0.5, 0.5)
+                    new UniformDistributedStochasticValue(0.0, 0.1)
                 ),
-                new RidgeRegularizer(0.001)
+                new RidgeRegularizer(0.0001)
             ),
 
             Arguments.of(
                 new LinearWithSinusApproximatingFunction(
-                    new NormalDistributedStochasticValue(0.0, 0.33)
+                    new NormalDistributedStochasticValue(0.0, 0.033)
                 ),
                 null
             ),
             Arguments.of(
                 new LinearWithSinusApproximatingFunction(
-                    new NormalDistributedStochasticValue(0.0, 0.33)
+                    new NormalDistributedStochasticValue(0.0, 0.033)
                 ),
-                new RidgeRegularizer(0.001)
+                new RidgeRegularizer(0.0001)
             ),
 
             Arguments.of(
                 new PolynomialApproximatingFunction(
-                    new UniformDistributedStochasticValue(-0.5, 0.5)
+                    new UniformDistributedStochasticValue(0.0, 0.1)
                 ),
                 null
             ),
             Arguments.of(
                 new PolynomialApproximatingFunction(
-                    new UniformDistributedStochasticValue(-0.5, 0.5)
+                    new UniformDistributedStochasticValue(0.0, 0.1)
                 ),
-                new RidgeRegularizer(0.001)
+                new RidgeRegularizer(0.0001)
             ),
 
             Arguments.of(
                 new PolynomialApproximatingFunction(
-                    new NormalDistributedStochasticValue(0.0, 0.33)
+                    new NormalDistributedStochasticValue(0.0, 0.033)
                 ),
                 null
             ),
             Arguments.of(
                 new PolynomialApproximatingFunction(
-                    new NormalDistributedStochasticValue(0.0, 0.33)
+                    new NormalDistributedStochasticValue(0.0, 0.033)
                 ),
-                new RidgeRegularizer(0.001)
+                new RidgeRegularizer(0.0001)
             )
         );
     }
 
     @ParameterizedTest
     @MethodSource("polynomialRegressionTestParameters")
-    public void polynomialRegressionTest(ApproximatingFunction approximatingFunction, Regularizer regularizer) throws IOException {
-        List<Sample> trainSamples = SelectionGenerator.generateSamples(approximatingFunction, 200);
-        List<Sample> testSamples = SelectionGenerator.generateSamples(approximatingFunction, 20);
+    public void polynomialRegressionTest(ApproximatingFunction approximatingFunction, Regularizer regularizer) {
+        List<Sample> trainSamples = SelectionGenerator.generateSamples(approximatingFunction, 200000);
+        List<Sample> testSamples = SelectionGenerator.generateSamples(approximatingFunction, 20000);
 
-        for (int i = 1; i < 16; ++i) {
-            System.out.println("Approximating with degree = " + i);
+        System.out.println("Function: " + approximatingFunction.getClass().getSimpleName());
+        System.out.println("Regularizer: " + (regularizer != null ? regularizer.getClass().getSimpleName() : null));
 
-            new PolynomialRegressionExperiment().launchRegressionWithTest(
-                i,
-                trainSamples,
-                testSamples,
-                new MeanSquaredErrorLossFunction(regularizer),
-                regularizer
-            );
-        }
+        double loss = PolynomialRegressionExperiment.launchRegressionWithTest(
+            POLYNOMIAL_DEGREE,
+            trainSamples,
+            testSamples,
+            new MeanSquaredErrorLossFunction(regularizer),
+            regularizer
+        );
+
+        System.out.println("Loss: " + loss);
+        System.out.println();
     }
 
 }

@@ -10,8 +10,8 @@ public abstract class Regularizer {
         this.lambda = lambda;
     }
 
-    public abstract double evaluateLossWithRegularization(double[] regressionModel);
+    public abstract double evaluateLossRegularizationTerm(double[] regressionModel);
 
-    public abstract RealMatrix evaluateMatrixWithRegularization(RealMatrix xTx);
+    public abstract RealMatrix evaluateMatrixRegularizationTerm(int dimension);
 
 }

@@ -1,6 +1,6 @@
 package ru.nsu.util.selection;
 
-import ru.nsu.util.selection.error.EvaluationError;
+import ru.nsu.util.selection.stochastic.StochasticValue;
 import ru.nsu.util.selection.function.ApproximatingFunction;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class RegressionSelectionGenerator {
 
     public static List<RegressionSample> getSamples(
         ApproximatingFunction function,
-        EvaluationError error,
+        StochasticValue error,
         int samplesNum
     ) {
         return IntStream.range(0, samplesNum).boxed()
