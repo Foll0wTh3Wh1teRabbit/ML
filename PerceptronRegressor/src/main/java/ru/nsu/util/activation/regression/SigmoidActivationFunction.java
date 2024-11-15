@@ -7,7 +7,7 @@ import static ru.nsu.util.activation.FunctionalOperators.SIGMOID_DERIVATIVE_FROM
 public class SigmoidActivationFunction implements RegressionActivationFunction {
 
     @Override
-    public Double apply(Double x) {
+    public double value(double x) {
         return SIGMOID.apply(x);
     }
 

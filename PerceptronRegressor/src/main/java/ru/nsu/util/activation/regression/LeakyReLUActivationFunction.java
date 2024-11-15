@@ -7,7 +7,7 @@ import static ru.nsu.util.activation.FunctionalOperators.LEAKY_RELU_DERIVATIVE_F
 public class LeakyReLUActivationFunction implements RegressionActivationFunction {
 
     @Override
-    public Double apply(Double x) {
+    public double value(double x) {
         return LEAKY_RELU.apply(x);
     }
 

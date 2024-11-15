@@ -54,9 +54,9 @@ public class FunctionalOperators {
         x -> Math.max(0.01 * x, x);
 
     public static final UnaryOperator<Double> LEAKY_RELU_DERIVATIVE =
-        x -> (x > 0 ? -0.01 : 1.0);
+        x -> (x > 0 ? 1.0 : -0.01);
 
     public static final UnaryOperator<Double> LEAKY_RELU_DERIVATIVE_FROM_ACTIVATION_VALUE =
-        x -> (x > 0 ? -0.01 : 1.0);
+        x -> (x > 0 ? 1.0 : -0.01);
 
 }

@@ -11,7 +11,7 @@ public class MeanSquaredErrorLossFunction implements LossFunction {
 
     @Override
     public double calculateGradient(double predicted, double actual) {
-        return 2 * (predicted - actual);
+        return predicted - actual;
     }
 
 }

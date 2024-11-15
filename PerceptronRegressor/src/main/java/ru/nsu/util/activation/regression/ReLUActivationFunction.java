@@ -7,7 +7,7 @@ import static ru.nsu.util.activation.FunctionalOperators.RELU_DERIVATIVE_FROM_AC
 public class ReLUActivationFunction implements RegressionActivationFunction {
 
     @Override
-    public Double apply(Double x) {
+    public double value(double x) {
         return RELU.apply(x);
     }
 

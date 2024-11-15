@@ -7,7 +7,7 @@ import static ru.nsu.util.activation.FunctionalOperators.TANH_DERIVATIVE_FROM_AC
 public class HyperbolicTangentActivationFunction implements RegressionActivationFunction {
 
     @Override
-    public Double apply(Double x) {
+    public double value(double x) {
         return TANH.apply(x);
     }
 

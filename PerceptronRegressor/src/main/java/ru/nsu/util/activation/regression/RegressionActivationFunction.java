@@ -1,8 +1,8 @@
 package ru.nsu.util.activation.regression;
 
-import java.util.function.Function;
+import org.apache.commons.math.analysis.UnivariateRealFunction;
 
-public interface RegressionActivationFunction extends Function<Double, Double> {
+public interface RegressionActivationFunction extends UnivariateRealFunction {
 
     double getDerivative(double x);
 

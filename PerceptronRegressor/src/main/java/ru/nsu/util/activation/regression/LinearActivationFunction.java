@@ -7,7 +7,7 @@ import static ru.nsu.util.activation.FunctionalOperators.LINEAR_DERIVATIVE_FROM_
 public class LinearActivationFunction implements RegressionActivationFunction {
 
     @Override
-    public Double apply(Double x) {
+    public double value(double x) {
         return LINEAR.apply(x);
     }
 

@@ -1,49 +1,50 @@
 package ru.nsu;
 
+import org.apache.commons.math.FunctionEvaluationException;
 import ru.nsu.perceptron.multilayer.MultiLayerPerceptron;
+import ru.nsu.util.activation.regression.HyperbolicTangentActivationFunction;
 import ru.nsu.util.activation.regression.LeakyReLUActivationFunction;
-import ru.nsu.util.loss.MeanAbsoluteErrorLossFunction;
+import ru.nsu.util.activation.regression.ReLUActivationFunction;
+import ru.nsu.util.activation.regression.SigmoidActivationFunction;
+import ru.nsu.util.loss.MeanSquaredErrorLossFunction;
 import ru.nsu.util.selection.RegressionSample;
 import ru.nsu.util.selection.RegressionSelectionGenerator;
 import ru.nsu.util.selection.function.CosinusApproximatingFunction;
+import ru.nsu.util.selection.function.LinearWithSinusApproximatingFunction;
+import ru.nsu.util.selection.function.PolynomialApproximatingFunction;
 import ru.nsu.util.selection.stochastic.NormalDistributionStochasticValue;
 
 import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
-        List<RegressionSample> samples = RegressionSelectionGenerator.getSamples(
-            new CosinusApproximatingFunction(),
-            new NormalDistributionStochasticValue(0.0, 0.0),
-            5000
+    public static void main(String[] args) throws FunctionEvaluationException {
+        MultiLayerPerceptron perceptron = new MultiLayerPerceptron(
+            List.of(5, 16, 32, 16, 1),
+            List.of(
+                new LeakyReLUActivationFunction(),
+                new LeakyReLUActivationFunction(),
+                new LeakyReLUActivationFunction(),
+                new LeakyReLUActivationFunction()
+            ),
+            new MeanSquaredErrorLossFunction(),
+            0.0001
         );
 
-        MultiLayerPerceptron perceptron =
-            new MultiLayerPerceptron(
-                List.of(8, 4, 4, 1),
-                new LeakyReLUActivationFunction(),
-                new MeanAbsoluteErrorLossFunction(),
-                1.0e-4
-            );
-
-        perceptron.train(samples, 3000);
+        List<RegressionSample> trainSamples = RegressionSelectionGenerator.getSamples(
+            new LinearWithSinusApproximatingFunction(),
+            new NormalDistributionStochasticValue(0.0, 0.0),
+            1000
+        );
 
         List<RegressionSample> testSamples = RegressionSelectionGenerator.getSamples(
-            new CosinusApproximatingFunction(),
+            new LinearWithSinusApproximatingFunction(),
             new NormalDistributionStochasticValue(0.0, 0.0),
-            30
+            200
         );
 
-        for (RegressionSample sample : testSamples) {
-            System.out.println("Actual: (" + sample.feature() + ", " + sample.label() + ")");
-        }
-
-        for (RegressionSample sample : testSamples) {
-            double predicted = perceptron.predict(sample.feature());
-
-            System.out.println("Predicted: (" + sample.feature() + ", " + predicted + ")");
-        }
+        perceptron.train(trainSamples, 20000);
+        perceptron.test(testSamples);
     }
 
 }
