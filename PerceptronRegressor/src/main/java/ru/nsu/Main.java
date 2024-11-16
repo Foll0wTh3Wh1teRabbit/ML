@@ -2,16 +2,11 @@ package ru.nsu;
 
 import org.apache.commons.math.FunctionEvaluationException;
 import ru.nsu.perceptron.multilayer.MultiLayerPerceptron;
-import ru.nsu.util.activation.regression.HyperbolicTangentActivationFunction;
 import ru.nsu.util.activation.regression.LeakyReLUActivationFunction;
-import ru.nsu.util.activation.regression.ReLUActivationFunction;
-import ru.nsu.util.activation.regression.SigmoidActivationFunction;
 import ru.nsu.util.loss.MeanSquaredErrorLossFunction;
 import ru.nsu.util.selection.RegressionSample;
 import ru.nsu.util.selection.RegressionSelectionGenerator;
-import ru.nsu.util.selection.function.CosinusApproximatingFunction;
 import ru.nsu.util.selection.function.LinearWithSinusApproximatingFunction;
-import ru.nsu.util.selection.function.PolynomialApproximatingFunction;
 import ru.nsu.util.selection.stochastic.NormalDistributionStochasticValue;
 
 import java.util.List;
@@ -22,7 +17,6 @@ public class Main {
         MultiLayerPerceptron perceptron = new MultiLayerPerceptron(
             List.of(5, 16, 32, 16, 1),
             List.of(
-                new LeakyReLUActivationFunction(),
                 new LeakyReLUActivationFunction(),
                 new LeakyReLUActivationFunction(),
                 new LeakyReLUActivationFunction()
